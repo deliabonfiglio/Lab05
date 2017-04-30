@@ -1,7 +1,7 @@
 package it.polito.tdp.anagrammi.controller;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import it.polito.tdp.anagrammi.model.Model;
 import javafx.event.ActionEvent;
@@ -39,10 +39,40 @@ public class AnagrammiController {
 	    @FXML
 	    void doReset(ActionEvent event) {
 
+	    	txtWord.clear();
+	    	txtCorretto.clear();
+	    	txtSbagliato.clear();
 	    }
 
 	    @FXML
 	    void doRisolvi(ActionEvent event) {
+	    	txtCorretto.clear();
+	    	txtSbagliato.clear();
+	    	
+	    	String parolaInput = txtWord.getText();
+	    	int corretti=0;
+	    	int sbagliati=0;
+	    	
+	    	if(!parolaInput.isEmpty() && parolaInput.matches("[a-zA-Z]+")){
+	    		Set<String> anagrammi = this.model.risolvi(parolaInput);
+	    		
+	    		for(String stemp: anagrammi){
+	    			//System.out.println(stemp.toString());
+	    			//System.out.println(this.model.isCorrect(stemp));
+	    			if(this.model.isCorrect(stemp)){
+	    				corretti++;
+	    				txtCorretto.appendText(stemp.toString()+"\n");
+	    			} else {
+	    				sbagliati++;
+	    				txtSbagliato.appendText(stemp.toString()+"\n");
+	    			}
+	    		}
+	    		txtCorretto.appendText("Numero di anagrammi corretti: "+corretti);
+	    		txtSbagliato.appendText("Numero di anagrammi sbagliati: "+sbagliati);
+	    	} else {
+	    		txtSbagliato.setText("Inserire UNA parola di cui cercare gli anagrammi!");
+	    	}
+	    	
 
 	    }
 
